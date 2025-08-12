@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -10,7 +10,7 @@ class Program
             .ConfigureServices((context, services) =>
             {
                 services.AddDbContextFactory<AppDbContext>(options =>
-                    options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ConsoleEFCoreDb;Trusted_Connection=True;"));
+                    options.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=ConsoleEFCoreDb;Trusted_Connection=True;TrustServerCertificate=True;Encrypt=True;"));
 
                 services.AddTransient<DataService>();
             })
@@ -64,4 +64,16 @@ public class DataService
             Console.WriteLine($"ID: {product.Id}, Name: {product.Name}");
         }
     }
+}
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public DbSet<Product> Products { get; set; }
+}
+
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
 }
